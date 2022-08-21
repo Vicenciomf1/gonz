@@ -1,0 +1,80 @@
+{% extends 'main_dos_columnas.html' %}
+
+{% block titulo %}
+    <title>Friendships</title>
+{% endblock %}
+
+{% block componente1 %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">User</th>
+                    <th class="text-center">Friend</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td class="text-center">{{ usuario.nombre }}</td>
+                    <td class="text-center">{{ usuario.amistades[0].nombre }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block componente2 %}
+    <div class="col-12">
+        <form class="p-5 container" method="post" action="/registrador-de-usuarios">
+            <h2 class="fs-2 text-center mb-2">Add User</h2>
+            <div class="row mb-4 g-3">
+                <div class="col-12">
+                    <label class="form-label">First Name:</label>
+                    <input class="form-control" type="text" name="nombre">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Last Name:</label>
+                    <input class="form-control" type="text" name="apellido">
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary d-block mx-auto px-4" type="submit">Add User</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12">
+        <form class="px-5" method="post" action="/ser_amigos">
+            {% with irregularidad = get_flashed_messages() %}
+                {% if irregularidad %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h4 class="fs-4 text-center">Irrregularidad:</h4>
+                        <p class="text-center">{{ irregularidad[0] }}</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <h2 class="fs-1 mb-4">Create Friendship</h2>
+            <div class="row mb-4 g-3">
+                <div class="col">
+                    <select class="form-select mb-3" name="user_id" id="Ed" aria-label="usuario" required> {# Cómo evito que elija el mismo dos veces?? #}
+                        <option selected disabled>Elige un usuario</option>
+                        {% for solito in solitos %}
+                            <option value="{{ solito.id }}">{{ solito.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select" name="friend_id" id="Ed" aria-label="amigo" required>
+                        <option selected disabled>Elige un amigo</option>
+                        {% for solito in solitos %}
+                            <option value="{{ solito.id }}">{{ solito.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary d-block mx-auto px-4" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
